@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">FetchAssessment</string>
     <string name="something_went_wrong">Something went wrong.</string>
+    <string name="refreshed_successfully">Refreshed successfully.</string>">
 </resources>
