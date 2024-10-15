@@ -73,7 +73,7 @@ fun ListScreenContent(
     isLoading: Boolean,
     viewModel: ListViewModel,
     uiState: ListUiState,
-    modifier: Modifier) {
+    modifier: Modifier = Modifier.fillMaxSize()) {
     val pullRefreshState = rememberPullRefreshState(isLoading, { viewModel.refreshListItems() })
 
     Box(modifier = modifier
