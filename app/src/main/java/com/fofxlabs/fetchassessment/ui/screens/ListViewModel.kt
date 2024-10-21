@@ -7,6 +7,7 @@ import com.fofxlabs.fetchassessment.dagger.IoDispatcher
 import com.fofxlabs.fetchassessment.data.DataRepository
 import com.fofxlabs.fetchassessment.data.externalModel.Item
 import com.fofxlabs.fetchassessment.data.externalModel.sortByListIdAndId
+import com.fofxlabs.fetchassessment.data.externalModel.sortByListIdAndName
 import com.fofxlabs.fetchassessment.ui.BaseViewModel
 import com.fofxlabs.fetchassessment.utils.UniqueWrapper
 import com.fofxlabs.fetchassessment.utils.WhileUiSubscribed
@@ -24,7 +25,7 @@ import javax.inject.Inject
 
 data class ListUiState(
     val isLoading: Boolean = false,
-    val snackbarMessage: UniqueWrapper<Int>? = null,
+    val snackbarMessage: UniqueWrapper? = null,
     val items: List<Item> = emptyList(),
 )
 
@@ -86,7 +87,7 @@ class ListViewModel @Inject constructor(
                 .collect { items ->
                     withContext(defaultDispatcher) {
                         // Sort by listId and and then by id
-                        this@ListViewModel.items.value = items.sortByListIdAndId()
+                        this@ListViewModel.items.value = items.sortByListIdAndName()
                         setIsLoading(GET_ITEM_STREAM, false)
                     }
                 }

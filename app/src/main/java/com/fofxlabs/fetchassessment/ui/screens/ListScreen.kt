@@ -19,7 +19,6 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fofxlabs.fetchassessment.R
 import com.fofxlabs.fetchassessment.data.externalModel.Item
 import com.fofxlabs.fetchassessment.ui.components.MainTopAppBar
+import com.fofxlabs.fetchassessment.ui.components.Snackbar
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -49,32 +49,23 @@ fun ListScreen(
         scaffoldState = scaffoldState
     ) { padding ->
         ListScreenContent(
-            isLoading = uiState.isLoading,
             viewModel = viewModel,
             uiState = uiState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding))
 
-        uiState.snackbarMessage?.value?.let { message ->
-            val snackbarText = stringResource(message)
-            LaunchedEffect(scaffoldState, viewModel, uiState.snackbarMessage, snackbarText) {
-                scaffoldState.snackbarHostState.showSnackbar(snackbarText)
-                viewModel.snackbarMessageShown()
-            }
-        }
+        Snackbar(uiState.snackbarMessage, scaffoldState, viewModel)
     }
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListScreenContent(
-    isLoading: Boolean,
     viewModel: ListViewModel,
     uiState: ListUiState,
     modifier: Modifier = Modifier.fillMaxSize()) {
-    val pullRefreshState = rememberPullRefreshState(isLoading, { viewModel.refreshListItems() })
+    val pullRefreshState = rememberPullRefreshState(uiState.isLoading, { viewModel.refreshListItems() })
 
     Box(modifier = modifier
         .pullRefresh(pullRefreshState)
@@ -86,7 +77,7 @@ fun ListScreenContent(
         }
 
         PullRefreshIndicator(
-            refreshing = isLoading,
+            refreshing = uiState.isLoading,
             state = pullRefreshState,
             modifier = Modifier.align(Alignment.TopCenter)
         )

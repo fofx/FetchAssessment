@@ -13,7 +13,7 @@ import kotlinx.coroutines.sync.withLock
  * BaseViewModel that contains common features for screens
  */
 open class BaseViewModel() : ViewModel() {
-    protected val snackbarMessage: MutableStateFlow<UniqueWrapper<Int>?> = MutableStateFlow(null)
+    protected val snackbarMessage: MutableStateFlow<UniqueWrapper?> = MutableStateFlow(null)
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -30,7 +30,12 @@ open class BaseViewModel() : ViewModel() {
     // Snackbar messages wrapped in UniqueWrapper
     // in order to display same message multiple times if needed
     protected fun showSnackbarMessage(@StringRes message: Int) {
-        snackbarMessage.value = UniqueWrapper(message)
+        snackbarMessage.value = UniqueWrapper.IntWrapper(message)
+    }
+    // Snackbar messages wrapped in UniqueWrapper
+    // in order to display same message multiple times if needed
+    protected fun showSnackbarMessage(message: String) {
+        snackbarMessage.value = UniqueWrapper.StringWrapper(message)
     }
 
     // When there are multiple network calls,
